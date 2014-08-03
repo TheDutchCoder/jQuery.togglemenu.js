@@ -115,6 +115,8 @@ $('.js-toggle-navigation').toggleMenu({
             // children) is clicked, otherwise it should close the target.
             $document.on(click, function(event) {
 
+                event.preventDefault();
+
                 var $event_target;
 
                 $event_target = $(event.target);
