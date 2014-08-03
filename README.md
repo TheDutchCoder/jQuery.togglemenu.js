@@ -1,4 +1,4 @@
 toggle-menu.js
 ==============
 
-A library agnostic plugin for mobile navigation menus
+A jQuery plugin for easy mobile navigation.
