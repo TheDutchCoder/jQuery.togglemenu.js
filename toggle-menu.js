@@ -4,7 +4,7 @@
  * A jQuery plugin to assist with hiding and showing navigation on mobile
  * devices.
  *
- * Leveragres Modernizr's .mq() method to reset then menu, but will ignore it if
+ * Leveragres Modernizr's .mq() method to reset the menu, but will ignore it if
  * Modernizr isn't used.
  *
  * @author  Reinier Kaper <reinier@scottbuckingham.com>
