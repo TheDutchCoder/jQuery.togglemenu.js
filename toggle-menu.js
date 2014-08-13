@@ -7,7 +7,7 @@
  * Leveragres Modernizr's .mq() method to reset the menu, but will ignore it if
  * Modernizr isn't used.
  *
- * @author  Reinier Kaper <reinier@scottbuckingham.com>
+ * @author  Reinier Kaper <mail@thedutchcoder.com>
  * @example
 
 $('.js-toggle-navigation').toggleMenu({
