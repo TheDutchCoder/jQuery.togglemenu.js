@@ -6,12 +6,22 @@
  * Leveragres Modernizr's .mq() method to reset a menu, but will ignore it if
  * Modernizr isn't used.
  *
+ * The following options can be configured:
+ *
+ *   1. nav: the selector for the menu you want to show.
+ *   2. subnav: the selector for the submenus within the menu.
+ *   3. namespace: all events are namespaced for more control. leaving this
+ *      blank will generate a random namespace.
+ *   4. reset: an array of media queries that will reset the menu (strip all
+ *      classes)
+ *
  * @author  Reinier Kaper <mail@thedutchcoder.com>
  * @example
 
 $('.js-toggle-navigation').toggleMenu({
     nav: '.nav--main',
     subnav: '.nav--sub',
+    namespace: 'savemenu'
     reset: ['screen and (min-width: 40em)']
 });
 
@@ -31,8 +41,9 @@ $('.js-toggle-navigation').toggleMenu({
 
         // The default options for the plugin.
         var defaults = {
-            nav: null,
-            subnav: null,
+            nav: 'nav > ul',
+            subnav: 'ul',
+            namespace: (Math.random() + 1).toString(36).substring(7),
             reset: []
         };
 
@@ -49,6 +60,7 @@ $('.js-toggle-navigation').toggleMenu({
                 $document,
                 $trigger,
                 $nav,
+                $subnav,
 
                 nameSpace,
                 windowWidth,
@@ -59,10 +71,11 @@ $('.js-toggle-navigation').toggleMenu({
             $document = $(document);
             $trigger = $(this);
             $nav = $(options.nav);
+            $subnav = $(options.nav + ' ' + options.subnav);
 
-            nameSpace = '.togglemenu' + index;
+            nameSpace = '.' + options.namespace;
             windowWidth = 0;
-            isReset = false;
+            isReset = true;
 
 
             // The click event is normalized in order to get correct body clicks
@@ -73,9 +86,10 @@ $('.js-toggle-navigation').toggleMenu({
 
 
 
+            /**
+             * Opens the menu.
+             */
             function openNav() {
-
-                event.preventDefault();
 
                 $trigger
                     .addClass('is-active');
@@ -85,45 +99,60 @@ $('.js-toggle-navigation').toggleMenu({
 
             }
 
-            function closeNav() {
 
-                event.preventDefault();
+
+            /**
+             * Closes the menu.
+             */
+            function closeNav() {
 
                 $trigger
                     .removeClass('is-active');
 
                 $nav
                     .removeClass('is-open')
-                    .addClass('is-closed')
-                    .find(options.subnav)
+                    .addClass('is-closed');
+
+                $subnav
                     .removeClass('is-open')
                     .addClass('is-closed');
 
             }
 
+
+
+            /**
+             * Resets the trigger and menu (removes all classes).
+             */
             function resetNav() {
 
                 $trigger
                     .removeClass('is-active');
 
                 $nav
-                    .removeClass('is-open is-closed')
-                    .find(options.subnav)
+                    .removeClass('is-open is-closed');
+
+                $subnav
                     .removeClass('is-open is-closed');
 
             }
 
+
+
+            /**
+             * Opens a sub menu.
+             *
+             * @param  {Object} $target The clicked element preceding the sub
+             *                          menu.
+             */
             function openSubnav($target) {
 
-                var $subnav;
-
-                $subnav = $target.next(options.subnav);
-
-                if (!$subnav.hasClass('is-open')) {
+                if (!$target.next(options.subnav).hasClass('is-open')) {
 
                     event.preventDefault();
 
-                    $subnav
+                    $target.next(options.subnav)
+                        .removeClass('is-closed')
                         .addClass('is-open');
 
                 }
@@ -139,14 +168,15 @@ $('.js-toggle-navigation').toggleMenu({
 
                 isReset = false;
 
+
                 // Event handling for the trigger.
                 //
                 // The target should toggle when the trigger (or one of its
                 // children) is clicked.
-                // 
+                //
                 // When a subnav item is clicked, the subnav should be opened.
                 // Otherwise the link should be followed normally.
-                // 
+                //
                 // Clicks on any other element close the menu.
                 $document.on(clickEvent, function(event) {
 
@@ -170,7 +200,8 @@ $('.js-toggle-navigation').toggleMenu({
 
                         }
 
-                    } else if ($target.next(options.subnav).length) {
+                    } else if ($target.closest($nav).length &&
+                               $target.next($subnav).length) {
 
                         openSubnav($target);
 
@@ -198,12 +229,12 @@ $('.js-toggle-navigation').toggleMenu({
             }
 
 
-
             // When the viewport is resized and a media query is hit where the
             // menu should be reset, the menu is closed and all styling is
             // removed.
-            // 
-            // Attach this only once for performance!
+            //
+            // Events for this instance are also added or removed, depending on
+            // the media queries.
             $window.on('resize' + nameSpace, function() {
 
 
@@ -241,11 +272,26 @@ $('.js-toggle-navigation').toggleMenu({
 
                         }
 
+
+                        // If the menu has been reset, but none of the queries
+                        // have been hit, reattach the event handlers.
                         if (isReset) {
 
                             attachEventHandlers();
 
                         }
+
+                    }
+
+                } else {
+
+
+                    // If no reset queries have been specified (or Modernizr
+                    // isn't used) and there are no event handlers yet, attach
+                    // them.
+                    if (isReset) {
+
+                        attachEventHandlers();
 
                     }
 
