@@ -111,7 +111,9 @@ $('.js-toggle-navigation').toggleMenu({
 
                 $nav
                     .removeClass('is-open')
-                    .addClass('is-closed');
+                    .addClass('is-closed')
+                    .find('*')
+                    .removeClass('is-active');
 
                 $subnav
                     .removeClass('is-open')
@@ -130,7 +132,9 @@ $('.js-toggle-navigation').toggleMenu({
                     .removeClass('is-active');
 
                 $nav
-                    .removeClass('is-open is-closed');
+                    .removeClass('is-open is-closed')
+                    .find('*')
+                    .removeClass('is-active');
 
                 $subnav
                     .removeClass('is-open is-closed');
@@ -151,7 +155,9 @@ $('.js-toggle-navigation').toggleMenu({
 
                     event.preventDefault();
 
-                    $target.siblings(options.subnav)
+                    $target
+                        .addClass('is-active')
+                        .siblings(options.subnav)
                         .removeClass('is-closed')
                         .addClass('is-open');
 
