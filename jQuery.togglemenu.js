@@ -147,11 +147,11 @@ $('.js-toggle-navigation').toggleMenu({
              */
             function openSubnav($target) {
 
-                if (!$target.next(options.subnav).hasClass('is-open')) {
+                if (!$target.siblings(options.subnav).hasClass('is-open')) {
 
                     event.preventDefault();
 
-                    $target.next(options.subnav)
+                    $target.siblings(options.subnav)
                         .removeClass('is-closed')
                         .addClass('is-open');
 
@@ -201,7 +201,7 @@ $('.js-toggle-navigation').toggleMenu({
                         }
 
                     } else if ($target.closest($nav).length &&
-                               $target.next($subnav).length) {
+                               $target.siblings($subnav).length) {
 
                         openSubnav($target);
 
