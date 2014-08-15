@@ -206,10 +206,17 @@ $('.js-toggle-navigation').toggleMenu({
 
                         }
 
-                    } else if ($target.closest($nav).length &&
-                               $target.siblings($subnav).length) {
+                    } else if ($target.closest($nav).length) {
 
-                        openSubnav($target);
+                        if ($target.siblings($subnav).length) {
+
+                            openSubnav($target);
+
+                        } else {
+
+                            return;
+
+                        }
 
                     } else {
 
