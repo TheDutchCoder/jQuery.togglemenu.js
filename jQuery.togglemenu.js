@@ -18,7 +18,7 @@
  * @author  Reinier Kaper <mail@thedutchcoder.com>
  * @example
 
-$('.js-toggle-navigation').toggleMenu({
+$('.js-toggle-navigation').togglemenu({
     nav: '.nav--main',
     subnav: '.nav--sub',
     namespace: 'savemenu'
