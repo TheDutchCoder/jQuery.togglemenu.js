@@ -95,6 +95,7 @@ $('.js-toggle-navigation').toggleMenu({
                     .addClass('is-active');
 
                 $nav
+                    .removeClass('is-closed')
                     .addClass('is-open');
 
             }
